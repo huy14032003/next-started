@@ -34,3 +34,23 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+cài cấu hình node module
+
+```bash
+ npm i lucide-react
+npm install prisma @prisma/client
+npm install mysql2
+npm install bcryptjs
+
+```
+
+sau khi thay đổi từ db thì cần cấu hình lại cho prisma
+
+```bash
+npx prisma db pull
+npx prisma generate
+#nếu lỗi thì
+taskkill /IM node.exe /F
+#rồi chạy lại
+ npx prisma generate
+```
