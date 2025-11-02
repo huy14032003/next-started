@@ -54,3 +54,8 @@ taskkill /IM node.exe /F
 #rồi chạy lại
  npx prisma generate
 ```
+cấu hình .evn
+```bash
+DATABASE_URL="mysql://root:huy1403@localhost:3306/auth"
+JWT_SECRET="huy_software"
+```
