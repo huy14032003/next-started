@@ -1,39 +1,48 @@
 "use client";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User, ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
-export default function Home() {
+import { useState } from "react";
+const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [email, setEmail] = useState("");
-  const [password, setPass] = useState("");
-  const handleLogin = async () => {
-    try {
-      const body = {
-        email: email,
-        password: password,
-      };
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        alert(errorData.error || "Lỗi đăng ký");
-        return;
-      }
-      const data = await res.json();
-      alert(data.message || data.error);
-    } catch (error) {
-      console.error("Fetch error:", error);
-      alert("Không thể kết nối server (fail to fetch)");
+  const [password, setPassWord] = useState("");
+  const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+const handleRegister = async () => {
+  try {
+    const body = {
+      email,
+      password,
+      phonenumber: phone,
+      name,
+    };
+
+    const res = await fetch("/api/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    // Kiểm tra phản hồi có hợp lệ không
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      alert(errorData.error || "Lỗi đăng ký");
+      return;
     }
-  };
+
+    const data = await res.json();
+    alert(data.message);
+  } catch (error) {
+    console.error("Fetch error:", error);
+    alert("Không thể kết nối server (fail to fetch)");
+  }
+};
   return (
     <>
-      <div className="flex flex-col justify-center items-center w-full h-screen ">
+      <div className="flex flex-col justify-center items-center ">
         <div className="container-title mb-11">
-          <span className="font-bold text-3xl">Sign in to your account</span>
+          <span className="font-bold text-3xl">Register your account</span>
         </div>
         <div
           className="
@@ -43,36 +52,37 @@ export default function Home() {
           shadow-lg
           transition duration-300
         ">
-          <form
-            action=""
-            onSubmit={(e) => {
+          <form action="" onSubmit={(e) => {
               e.preventDefault();
-              handleLogin();
+              handleRegister();
             }}>
             <div className="flex flex-col mb-3">
               <label htmlFor="" className="mb-3">
                 Email address
               </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="border rounded px-3"
-                placeholder="Tài khoản"
-                style={{ height: "2.5rem" }}
-              />
+              <div className="relative">
+                {/* <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" /> */}
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="border rounded px-3 w-full"
+                  placeholder="Tài khoản"
+                  style={{ height: "2.5rem" }}
+                />
+              </div>
             </div>
 
             <div className="flex flex-col mb-3">
               <label className="mb-3">Mật khẩu</label>
               <div className="relative">
                 <input
+                  value={password}
+                  onChange={(e) => setPassWord(e.target.value)}
                   type={showPassword ? "text" : "password"}
                   placeholder="Nhập mật khẩu"
                   className="w-full border rounded  px-3 "
                   style={{ height: "2.5rem" }}
-                  value={password}
-                  onChange={(e) => setPass(e.target.value)}
                 />
                 <button
                   type="button"
@@ -82,20 +92,75 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-between mb-3">
-              <div className="flex gap-1 justify-center items-center">
-                <input type="checkbox" id="remember" />
-                <label htmlFor="remember">Remember me</label>
+            <div className="flex flex-col mb-3">
+              <label className="mb-3">Nhập lại Mật khẩu</label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Nhập mật khẩu"
+                  className="w-full border rounded  px-3 "
+                  style={{ height: "2.5rem" }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition">
+                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
               </div>
-              <a href="" className="text-blue-700 hover:text-blue-500 font-medium">
-                Forgot password?
-              </a>
+            </div>
+            <div className="flex flex-col mb-3">
+              <label htmlFor="" className="mb-3">
+                Full name
+              </label>
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                type="text"
+                className="border rounded px-3"
+                placeholder="Họ và tên"
+                style={{ height: "2.5rem" }}
+              />
+            </div>
+            {/* <div className="flex flex-col mb-3">
+              <label htmlFor="" className="mb-3">
+                Birthday
+              </label>
+              <input type="date" className="border rounded px-3" placeholder="Ngày sinh" style={{ height: "2.5rem" }} />
+            </div> */}
+            <div className="flex flex-col mb-3">
+              <label htmlFor="" className="mb-3">
+                Phone number
+              </label>
+              <input
+              value={phone}
+                  onChange={(e)=>setPhone(e.target.value)}
+                type="text"
+                className="border rounded px-3"
+                placeholder="Số điện thoại"
+                style={{ height: "2.5rem" }}
+              />
+            </div>
+            <div className="flex items-start justify-center">
+              <input
+                type="checkbox"
+                // checked={agreedToTerms}
+                // onChange={(e) => setAgreedToTerms(e.target.checked)}
+                className="mt-1 w-4 h-4"
+                id="agree"
+              />
+              <label className="ml-2 text-sm" htmlFor="agree">
+                Tôi đồng ý với{" "}
+                <span className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer">Điều khoản dịch vụ</span>{" "}
+                và{" "}
+                <span className="text-blue-600 hover:text-blue-700 font-medium cursor-pointer">Chính sách bảo mật</span>
+              </label>
             </div>
             <div className="flex justify-center items-center mx-6">
               <button
                 type="submit"
                 className="btn bg-blue-500 cursor-pointer hover:bg-blue-400 p-1 text-white rounded flex-1">
-                Sign in
+                Register
               </button>
             </div>
             <div className="flex items-center my-4">
@@ -156,12 +221,13 @@ export default function Home() {
           </form>
         </div>
         <div className="container-footer mt-5">
-          <span className="font-medium text-gray-400"> Not a member? </span>
-          <a href="/register" className="text-blue-700 hover:text-blue-500 font-bold">
-            Register
-          </a>
+          <span className="font-medium text-gray-400"> You have account? </span>
+          <Link href="/" className="text-blue-700 hover:text-blue-500 font-bold">
+            Login
+          </Link>
         </div>
       </div>
     </>
   );
-}
+};
+export default Register;
