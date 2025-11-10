@@ -59,3 +59,5 @@ cấu hình .evn
 DATABASE_URL="mysql://root:huy1403@localhost:3306/auth"
 JWT_SECRET="huy_software"
 ```
+
+https://cal.com/minh-pham/inteview?layout=mobile
